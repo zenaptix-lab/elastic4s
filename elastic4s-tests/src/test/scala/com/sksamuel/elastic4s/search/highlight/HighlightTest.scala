@@ -1,6 +1,6 @@
 package com.sksamuel.elastic4s.search.highlight
 
-import com.sksamuel.elastic4s.RefreshPolicy
+import com.sksamuel.elastic4s.requests.common.RefreshPolicy
 import com.sksamuel.elastic4s.testkit.DockerTests
 import org.scalatest.{Matchers, WordSpec}
 
@@ -32,6 +32,11 @@ class HighlightTest extends WordSpec with Matchers with DockerTests {
   }.await
 
   "highlighting" should {
+    "ignore missing highlight" in {
+      client.execute {
+        search("intros").matchAllQuery().limit(1)
+      }.await.result.hits.hits.map(_.highlight) shouldBe Array(Map.empty)
+    }
     "highlight selected words" in {
 
       val resp = client.execute {
@@ -45,7 +50,7 @@ class HighlightTest extends WordSpec with Matchers with DockerTests {
       val fragments = resp.hits.hits.head.highlightFragments("text")
       fragments.size shouldBe 1
       fragments.head shouldBe
-        "Space, the final <em>frontier</em>."
+        "Space, the final <em>frontier</em>. These are the voyages of the starship Enterprise."
     }
     "use fragment size" in {
       val resp = client.execute {

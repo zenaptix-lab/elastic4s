@@ -1,12 +1,11 @@
-elastic4s - Elasticsearch HTTP and TCP Scala Client
+elastic4s - Elasticsearch Scala Client
 =========
 
-[![Join the chat at https://gitter.im/sksamuel/elastic4s](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sksamuel/elastic4s?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/sksamuel/elastic4s.png?branch=master)](https://travis-ci.org/sksamuel/elastic4s)
 [<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.11.svg?label=latest%20release%20for%202.11"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.11%22)
 [<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.12.svg?label=latest%20release%20for%202.12"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.12%22)
 
-Elastic4s is a concise, idiomatic, reactive, type safe Scala client for Elasticsearch. The client can be used over both HTTP and TCP  by choosing either of the `elastic4s-http` or `elastic4s-tcp` submodules. The official Elasticsearch Java client can of course be used in Scala, but due to Java's syntax it is more verbose and it naturally doesn't support classes in the core Scala core library nor Scala idioms.
+Elastic4s is a concise, idiomatic, reactive, type safe Scala client for Elasticsearch. The official Elasticsearch Java client can of course be used in Scala, but due to Java's syntax it is more verbose and it naturally doesn't support classes in the core Scala core library nor Scala idioms such as typeclass support.
 
 Elastic4s's DSL allows you to construct your requests programatically, with syntactic and semantic errors manifested at compile time, and uses standard Scala futures to enable you to easily integrate into an asynchronous workflow. The aim of the DSL is that requests are written in a builder-like way, while staying broadly similar to the Java API or Rest API. Each request is an immutable object, so you can create requests and safely reuse them, or further copy them for derived requests. Because each request is strongly typed your IDE or editor can use the type information to show you what operations are available for any request type.
 
@@ -17,14 +16,13 @@ Read [the full documentation](https://sksamuel.github.io/elastic4s/docs/) to lea
 #### Key points
 
 * Type safe concise DSL
-* Integrates with standard Scala futures
+* Integrates with standard Scala futures or other effects libraries
 * Uses Scala collections library over Java collections
 * Returns `Option` where the java methods would return null
 * Uses Scala `Duration`s instead of strings/longs for time values
-* Supports typeclasses for indexing, updating, and search backed by Jackson, Circe, Json4s and PlayJson implementations
-* Leverages the built-in Java client
+* Supports typeclasses for indexing, updating, and search backed by Jackson, Circe, Json4s, PlayJson and Spray Json implementations
 * Provides [reactive-streams](#elastic-reactive-streams) implementation
-* Provides embedded node and testkit subprojects, ideal for your tests
+* Provides a testkit subproject ideal for your tests
 
 ## Introduction
 
@@ -46,6 +44,9 @@ The second issue is that it uses Netty 4.1. However some popular projects such a
 
 | Elasticsearch Version | Scala 2.10 | Scala 2.11 | Scala 2.12 |
 |-------|---------|---------|-----------|
+|6.5.x||[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.11/6.5.svg?label=latest%206.5%20release%20for%202.11"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.11%22)|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.12/6.5.svg?label=latest%206.5%20release%20for%202.12"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.12%22)|
+|6.4.x||[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.11/6.4.svg?label=latest%206.4%20release%20for%202.11"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.11%22)|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.12/6.4.svg?label=latest%206.4%20release%20for%202.12"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.12%22)|
+|6.3.x||[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.11/6.3.svg?label=latest%206.3%20release%20for%202.11"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.11%22)|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.12/6.3.svg?label=latest%206.3%20release%20for%202.12"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.12%22)|
 |6.2.x||[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.11/6.2.svg?label=latest%206.2%20release%20for%202.11"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.11%22)|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.12/6.2.svg?label=latest%206.2%20release%20for%202.12"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.12%22)|
 |6.1.x||[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.11/6.1.svg?label=latest%206.1%20release%20for%202.11"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.11%22)|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.12/6.1.svg?label=latest%206.1%20release%20for%202.12"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.12%22)|
 |6.0.x||[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.11/6.0.svg?label=latest%206.0%20release%20for%202.11"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.11%22)|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.12/6.0.svg?label=latest%206.0%20release%20for%202.12"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.12%22)|
@@ -61,6 +62,7 @@ The second issue is that it uses Netty 4.1. However some popular projects such a
 |2.2.x|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.10/2.2.svg?label=latest%202.2%20release%20for%202.10"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.10%22)|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.11/2.2.svg?label=latest%202.2%20release%20for%202.11"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.11%22)||
 |2.1.x|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.10/2.1.svg?label=latest%202.1%20release%20for%202.10"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.10%22)|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.11/2.1.svg?label=latest%202.1%20release%20for%202.11"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.11%22)||
 |2.0.x|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.10/2.0.svg?label=latest%202.0%20release%20for%202.10"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.10%22)|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.11/2.0.svg?label=latest%202.0%20release%20for%202.11"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.11%22)||
+|1.7.x|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.10/1.7.svg?label=latest%201.7%20release%20for%202.10"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.10%22)|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.11/1.7.svg?label=latest%201.7%20release%20for%202.11"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.11%22)|[<img src="https://img.shields.io/maven-central/v/com.sksamuel.elastic4s/elastic4s-core_2.12/1.7.svg?label=latest%201.7%20release%20for%202.12"/>](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22elastic4s-core_2.12%22)|
 
 For release prior to 2.0 search maven central.
 
@@ -74,13 +76,14 @@ https://github.com/sksamuel/elastic4s/tree/master/samples
 
 To get started you will need to add a dependency to either
 
-* [elastic4s-http](http://search.maven.org/#search%7Cga%7C1%7Celastic4s-http)
-* [elastic4s-tcp](http://search.maven.org/#search%7Cga%7C1%7Celastic4s-tcp)
+* [elastic4s-http](https://mvnrepository.com/artifact/com.sksamuel.elastic4s/elastic4s-http)
+* [elastic4s-tcp](https://mvnrepository.com/artifact/com.sksamuel.elastic4s/elastic4s-tcp)
 
 depending on which client you intend you use (or both).
 
 The basic usage is that you create an instance of a client and then invoke the `execute` method with the requests you
-want to perform. The execute method is asynchronous and will return a standard Scala `Future[T]` where T is the response
+want to perform. The execute method is asynchronous and will return a standard Scala `Future[T]`
+(or use one of the [Alternative executors](#alternative-executors)) where T is the response
 type appropriate for your request type. For example a _search_ request will return a response of type `SearchResponse`
 which contains the results of the search.
 
@@ -92,13 +95,27 @@ client classes.
 Requests are created using the elastic4s DSL. For example to create a search request, you would do:
 
 ```scala
-search("index" / "type").query("findthistext")`
+search("index" / "type").query("findthistext")
 ```
 
 The DSL methods are located in the `ElasticDsl` trait which needs to be imported or extended. Although the syntax is
 identical whether you use the HTTP or TCP client, you must import the appropriate trait
-(`com.sksamuel.elastic4s.ElasticDSL` for TCP or `com.sksamuel.elastic4s.http.ElasticDSL` for HTTP) depending on which
+(`com.sksamuel.elastic4s.ElasticDsl` for TCP or `com.sksamuel.elastic4s.http.ElasticDsl` for HTTP) depending on which
 client you are using.
+
+### Alternative Executors
+The default `Executor` uses scala `Future`s to execute requests, but there are alternate Executors that can be used by
+adding appropriate imports. The imports will create an implicit `Executor[F]` and a `Functor[F]`,
+where `F` is some effect type.
+
+#### Cats-Effect IO
+`import com.sksamuel.elastic4s.cats.effect.instances._` will provide implicit instances for `cats.effect.IO`
+
+#### Monix Task
+`import com.sksamuel.elastic4s.monix.instances._` will provide implicit instances for `monix.eval.Task`
+
+#### Scalaz Task
+`import com.sksamuel.elastic4s.scalaz.instances._` will provide implicit instances for `scalaz.concurrent.Task` 
 
 ### Example SBT Setup
 
@@ -112,7 +129,7 @@ libraryDependencies ++= Seq(
   "com.sksamuel.elastic4s" %% "elastic4s-http" % elastic4sVersion,
 
   // if you want to use reactive streams
-  "com.sksamuel.elastic4s" %% "elastic4s-streams" % elastic4sVersion,
+  "com.sksamuel.elastic4s" %% "elastic4s-http-streams" % elastic4sVersion,
 
   // testing
   "com.sksamuel.elastic4s" %% "elastic4s-testkit" % elastic4sVersion % "test",
@@ -122,18 +139,23 @@ libraryDependencies ++= Seq(
 
 ### Example Application
 
-An example is worth 1000 characters so here is a quick example of how to connect to a node with a client, create and
+An example is worth 1000 characters so here is a quick example of how to connect to a node with a client, create an
 index and index a one field document. Then we will search for that document using a simple text query.
 
 ```scala
+import com.sksamuel.elastic4s.RefreshPolicy
+import com.sksamuel.elastic4s.embedded.LocalNode
+import com.sksamuel.elastic4s.http.search.SearchResponse
+import com.sksamuel.elastic4s.http.{RequestFailure, RequestSuccess}
+
 object ArtistIndex extends App {
 
   // spawn an embedded node for testing
   val localNode = LocalNode("mycluster", "/tmp/datapath")
 
   // in this example we create a client attached to the embedded node, but
-  // in a real application you would provide the HTTP address to the HttpClient constructor.
-  val client = localNode.http(true)
+  // in a real application you would provide the HTTP address to the ElasticClient constructor.
+  val client = localNode.client(shutdownNodeOnClose = true)
 
   // we must import the dsl
   import com.sksamuel.elastic4s.http.ElasticDsl._
@@ -151,10 +173,10 @@ object ArtistIndex extends App {
   }.await
 
   // Next we index a single document which is just the name of an Artist.
-  // The RefreshPolicy.IMMEDIATE means that we want this document to flush to the disk immmediately.
+  // The RefreshPolicy.Immediate means that we want this document to flush to the disk immediately.
   // see the section on Eventual Consistency.
   client.execute {
-    indexInto("artists" / "modern").doc("name" -> "L.S. Lowry").refresh(RefreshPolicy.IMMEDIATE)
+    indexInto("artists" / "modern").fields("name" -> "L.S. Lowry").refresh(RefreshPolicy.Immediate)
   }.await
 
   // now we can search for the document we just indexed
@@ -162,15 +184,19 @@ object ArtistIndex extends App {
     search("artists") query "lowry"
   }.await
 
-  // resp is an Either of a RequestFailure instance containing the elasticsearch error details,
-  // or a RequestSuccess instance that depends on the type of request.
+  // resp is a Response[+U] ADT consisting of either a RequestFailure containing the
+  // Elasticsearch error details, or a RequestSuccess[U] that depends on the type of request.
   // In this case it is a RequestSuccess[SearchResponse]
 
   println("---- Search Results ----")
   resp match {
-    case Left(failure) => println("We failed " + failure.error)
-    case Right(results) => println(results.result.hits)
+    case failure: RequestFailure => println("We failed " + failure.error)
+    case results: RequestSuccess[SearchResponse] => println(results.result.hits.hits.toList)
+    case results: RequestSuccess[_] => println(results.result)
   }
+
+  // Response also supports familiar combinators like map / flatMap / foreach:
+  resp foreach (search => println(s"There were ${search.totalHits} total hits"))
 
   client.close()
 }
@@ -333,12 +359,12 @@ resolvers += "elasticsearch-releases" at "https://artifacts.elastic.co/maven"
 
 ## Embedded Node
 
-A locally configured node and client can be created by including the elastic4s-embedded module. Then a local node can be started by invoking `LocalNode()` with the cluster name and data path. From the local node we can return a handle to the client by invoking the `elastic4sclient` function.
+A locally configured node and client can be created by including the elastic4s-embedded module. Then a local node can be started by invoking `LocalNode()` with the cluster name and data path. From the local node we can return a handle to the client by invoking the `client` function.
 
 ```scala
-import com.sksamuel.elastic4s.ElasticClient
+import com.sksamuel.elastic4s.embedded.LocalNode
 val node = LocalNode(clusterName, pathHome)
-val client = node.elastic4sclient()
+val client = node.client(shutdownNodeOnClose = true)
 ```
 
 To specify settings for the local node you can pass in a settings object like this:
@@ -349,7 +375,7 @@ val settings = Settings.builder()
       .put("http.enabled", false)
       .build()
 val node = LocalNode(settings)
-val client = node.elastic4sclient(<shutdownNodeOnClose>)
+val client = node.client(<shutdownNodeOnClose>)
 ```
 
 If `shutdownNodeOnClose` is true, then once close is called on the client, the local node will be stopped. Otherwise you will manage the lifecycle of the local node yourself (stopping it before exiting the process).
@@ -379,16 +405,16 @@ To do this we add mappings:
 
 ```scala
 import com.sksamuel.elastic4s.mappings.FieldType._
-import com.sksamuel.elastic4s.StopAnalyzer
+import com.sksamuel.elastic4s.analyzers.StopAnalyzer
 
 client.execute {
-    createIndex("places") mappings (
-        mapping("cities") as (
-            keywordField("id"),
-            textField("name") boost 4,
-            textField("content") analyzer StopAnalyzer
-        )
+  createIndex("places") mappings (
+    mapping("cities") as (
+      keywordField("id"),
+      textField("name") boost 4,
+      textField("content") analyzer StopAnalyzer
     )
+  )
 }
 ```
 
@@ -459,11 +485,13 @@ Simply add the import for your chosen library below and then with those implicit
 |[Jackson](https://github.com/FasterXML/jackson-module-scala)|[elastic4s-jackson](http://search.maven.org/#search%7Cga%7C1%7Celastic4s-jackson)|import ElasticJackson.Implicits._|
 |[Json4s](http://json4s.org/)|[elastic4s-json4s](http://search.maven.org/#search%7Cga%7C1%7Celastic4s-json4s)|import ElasticJson4s.Implicits._|
 |[Circe](https://github.com/travisbrown/circe)|[elastic4s-circe](http://search.maven.org/#search%7Cga%7C1%7Celastic4s-circe)|import io.circe.generic.auto._ <br/>import com.sksamuel.elastic4s.circe._|
+|[PlayJson](https://github.com/playframework/play-json)|[elastic4s-play-json](http://search.maven.org/#search%7Cga%7C1%7Celastic4s-play-json)|import com.sksamuel.elastic4s.playjson._|
+|[Spray Json](https://github.com/spray/spray-json)|[elastic4s-spray-json](http://search.maven.org/#search%7Cga%7C1%7Celastic4s-spray-json)|import com.sksamuel.elastic4s.sprayjson._|
 
 ## Searching
 
 Searching is naturally the most involved operation.
-There are many ways to do [searching in elastic search](http://www.elasticsearch.org/guide/reference/api/search/) and that is reflected
+There are many ways to do [searching in Elasticsearch](http://www.elasticsearch.org/guide/reference/api/search/) and that is reflected
 in the higher complexity of the query DSL.
 
 To do a simple text search, where the query is parsed from a single string
@@ -537,8 +565,7 @@ val resp = client.execute {
 
 // .to[Character] will look for an implicit HitReader[Character] in scope
 // and then convert all the hits into Characters for us.
-val characters :Seq[Character] = resp.to[Character]
-
+val characters: Seq[Character] = resp.to[Character]
 ```
 
 This is basically the inverse of the `Indexable` typeclass. And just like Indexable, the json modules provide implementations
@@ -615,7 +642,7 @@ We can update existing documents without having to do a full index, by updating 
 
 ```scala
 client.execute {
-  update(25).in("scifi" / "starwars"). docAsUpsert (
+  update("25").in("scifi" / "starwars").docAsUpsert (
     "character" -> "chewie",
     "race" -> "wookie"
   )
@@ -647,9 +674,9 @@ wrap index, delete and update requests using the `bulk` keyword and pass to the 
 ```scala
 client.execute {
   bulk (
-    index into "bands/rock" fields "name"->"coldplay",
-    index into "bands/rock" fields "name"->"kings of leon",
-    index into "bands/pop" fields (
+    indexInto("bands" / "rock") fields "name"->"coldplay",
+    indexInto("bands" / "rock") fields "name"->"kings of leon",
+    indexInto("bands" / "pop") fields (
       "name" -> "elton john",
       "best_album" -> "tumbleweed connection"
     )
@@ -805,7 +832,7 @@ In addition there should be a further implicit in scope of type `RequestBuilder[
 implicit val builder = new RequestBuilder[SomeType] {
   import ElasticDsl._
   // the request returned doesn't have to be an index - it can be anything supported by the bulk api
-  def request(t: T): BulkCompatibleDefinition =  index into "index" / "type" fields ....
+  def request(t: T): BulkCompatibleRequest =  index into "index" / "type" fields ....
 }
 ```
 Then the subscriber can be created, and attached to a publisher:
@@ -1369,6 +1396,7 @@ Major upgrade to Elasticsearch 2.0.0 including breaking changes. _Please raise a
 * HMRC
 * Canal+
 * AOE
+* Starmind
 
 _Raise a PR to add your company here_
 

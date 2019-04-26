@@ -1,5 +1,4 @@
 {
-    "version": true,
     "query": {
         "nested": {
             "path": "obj1",
@@ -19,6 +18,12 @@
                 "name": "obj1",
                 "size": 6,
                 "highlight": {
+                    "post_tags": [
+                        "</b>"
+                    ],
+                    "pre_tags": [
+                        "<b>"
+                    ],
                     "fields": {
                         "name": {
                             "fragment_size": 20

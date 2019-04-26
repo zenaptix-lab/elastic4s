@@ -1,8 +1,7 @@
 package com.sksamuel.elastic4s.search.queries
 
-import com.sksamuel.elastic4s.http.ElasticDsl
 import com.sksamuel.elastic4s.testkit.{DockerTests, ElasticMatchers}
-import com.sksamuel.elastic4s.{ElasticDateMath, Years}
+import com.sksamuel.elastic4s.{ElasticDateMath, ElasticDsl, Years}
 import org.scalatest.WordSpec
 
 import scala.util.Try
@@ -45,7 +44,7 @@ class DateRangeQueryHttpTest
           rangeQuery("premiere_date").gte(ElasticDateMath("now").minus(5, Years))
         }
       }.await.result
-      resp.totalHits shouldBe 3
+      resp.totalHits shouldBe 2
     }
     "support date math for lte" in {
       val resp = client.execute {

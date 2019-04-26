@@ -4,6 +4,7 @@ import com.sksamuel.exts.StringOption
 
 import scala.language.implicitConversions
 
+@deprecated("Use ElasticNodeEndpoint", "6.3.3")
 object ElasticsearchClientUri {
 
   private val Regex = "(?:elasticsearch|http|https)://(.*?)/?(\\?.*?)?".r
@@ -13,7 +14,7 @@ object ElasticsearchClientUri {
   /**
     * Creates an ElasticsearchClientUri from a single host and port with no options.
     */
-  def apply(host: String, port: Int): ElasticsearchClientUri = apply(s"elasticsearch://$host:$port")
+  def apply(host: String, port: Int): ElasticsearchClientUri = apply(s"http://$host:$port")
 
   def apply(str: String): ElasticsearchClientUri =
     str match {
@@ -32,12 +33,12 @@ object ElasticsearchClientUri {
           .map(_.split('='))
           .collect {
             case Array(key, value) => (key, value)
-            case _                 => sys.error(s"Invalid query $query")
+            case _ => sys.error(s"Invalid query $query")
           }
         ElasticsearchClientUri(str, hosts.toList, options.toMap)
       case _ =>
         sys.error(
-          s"Invalid uri $str, must be in format elasticsearch://host:port,host:port?querystr, http://host:port,host:port?querystr or https://host:port,host:port?querystr"
+          s"Invalid uri $str, must be in format http(s)://host:port,host:port?querystr"
         )
     }
 }
@@ -45,7 +46,7 @@ object ElasticsearchClientUri {
 /**
   * Uri used to connect to an Elasticsearch cluster. The general format is
   *
-  * elasticsearch://host:port,host:port?querystring
+  * http(s)://host:port),host:port)?querystring
   *
   * Multiple host:port combinations can be specified, seperated by commas.
   * Options can be specified using standard uri query string syntax, eg cluster.name=superman
@@ -53,4 +54,5 @@ object ElasticsearchClientUri {
   * To use HTTPS when using the HTTP client, add ssl=true to the query parameters.
   *
   */
+@deprecated("Use ElasticNodeEndpoint", "6.3.3")
 case class ElasticsearchClientUri(uri: String, hosts: List[(String, Int)], options: Map[String, String] = Map.empty)
